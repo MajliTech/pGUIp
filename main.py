@@ -116,6 +116,7 @@ app.resizable(False, False)
 menu.pack(side="left")
 applist = ScrollFrame(app,600,600)
 applist.pack()
+app.title("pGUIp DEV")
 for i in "urllib3==1.26\ncryptography==1.0".split("\n"):#subprocess.getoutput("python3 -m pip freeze").split("\n"):
     i = i.split("==")
     try:
