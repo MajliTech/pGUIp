@@ -10,6 +10,14 @@ from tkinter import *
 from elevate import elevate
 from screeninfo import get_monitors
 from PIL import Image,ImageTk
+import os
+import ctypes
+def isAdmin():
+    try:
+        is_admin = (os.getuid() == 0)
+    except AttributeError:
+        is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+    return is_admin
 def gpi(name,vers):
     global installed
     if vers==None:
@@ -190,7 +198,7 @@ Label(menu,image=photo,width=200,height=200,background=Colors.Background).pack()
 serach = Entry(menu,background=Colors.Background)
 serach.pack(fill=tkinter.X)
 Button(menu,text=Strings.search,background=Colors.Background,command=lambda: search(serach.get())).pack(fill=tkinter.X)
-Button(menu,text=Strings.elevate,background=Colors.Background,command=lambda: el()).pack(fill=tkinter.X)
+if not isAdmin(): Button(menu,text=Strings.elevate,background=Colors.Background,command=lambda: el()).pack(fill=tkinter.X)
 app.geometry("800x600")
 app.resizable(False, False)
 menu.pack(side="left")
