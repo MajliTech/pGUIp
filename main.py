@@ -72,7 +72,7 @@ def search(name):
 def el():
     app.destroy()
     with open(__file__) as f:
-        elevate()
+        elevate(show_console=False)
 def add_package(parent,name="Lorem Ipsum",version="v2",description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc magna enim, commodo in mi et, tempus semper arcu. Aenean nec consequat neque. Maecenas bibendum imperdiet."):
     if len(name) > 17:
         name = name[:18]+"..."
