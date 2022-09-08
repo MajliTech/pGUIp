@@ -2,3 +2,4 @@ pymsgbox
 elevate
 pillow
 screeninfo
+requests
