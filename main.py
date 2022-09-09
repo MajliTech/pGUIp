@@ -5,13 +5,15 @@ import platform
 import re
 import json
 import requests
-import installer as pipings
+# import installer as pipings
 from tkinter import *
 from elevate import elevate
 from screeninfo import get_monitors
 from PIL import Image,ImageTk
 import os
 import ctypes
+elevate(graphical=True)
+print(os.getcwd())
 def isAdmin():
     try:
         is_admin = (os.getuid() == 0)
@@ -53,7 +55,7 @@ def gpi(name,vers):
     opmenu = OptionMenu(root,reles,*rel)
     
     f.pack(anchor=NW,expand=Y)
-    if vers==None: Button(root,text=Strings.install,background="white",command=lambda: pipings.install(name,reles.get())).pack()
+    if vers==None: Button(root,text=Strings.install,background="white",command=lambda: rad(pipings.install(name,reles.get()))).pack()
     else:
         Button(root,text=Strings.remove,background="white",command=lambda: rad(pipings.uninstall,root,name)).pack()
         Button(root,text=Strings.update,background="white",command=lambda: rad(pipings.update,root,name,reles.get())).pack()
@@ -88,6 +90,25 @@ def add_package(parent,name="Lorem Ipsum",version="v2",description="Lorem ipsum 
     butt = Button(parent,text=Strings.more,command=lambda: gpi(name,version),background=Colors.Background,fg=Colors.Text,width=20)
     butt.pack(anchor=NW)
     frame.pack()
+class pipings:
+    def install(name:str,version):
+        global installed
+        if version=="latest":
+            status= subprocess.getstatusoutput("pip install "+name)
+        else:
+            status= subprocess.getstatusoutput("pip install "+name+"=="+version)
+        if status[0]!=0:
+            pymsgbox.alert("PIP Error Code: "+str(status[0])+"\n\n"+status[1][:3000].replace("\n","\\n"),"pGUIp DEV")
+        else:
+            installed[name] = version
+    def uninstall(name:str):
+        global installed
+        status= subprocess.getstatusoutput("pip uninstall -y "+name)
+        if status[0]!=0: pymsgbox.alert("PIP Error Code: "+str(status[0])+"\n\n"+status[1][:3000].replace("\n","\\n"),"pGUIp DEV")
+        else: del(installed[name])
+        return
+    def update(name:str,version):
+        pass
 class ScrollFrame(tkinter.Frame):
     def __init__(self, parent,width=100,height=200,packpropagate=False):
         super().__init__(parent) # create a frame (self)
@@ -198,7 +219,7 @@ Label(menu,image=photo,width=200,height=200,background=Colors.Background).pack()
 serach = Entry(menu,background=Colors.Background)
 serach.pack(fill=tkinter.X)
 Button(menu,text=Strings.search,background=Colors.Background,command=lambda: search(serach.get())).pack(fill=tkinter.X)
-if not isAdmin(): Button(menu,text=Strings.elevate,background=Colors.Background,command=lambda: el()).pack(fill=tkinter.X)
+# if not isAdmin(): Button(menu,text=Strings.elevate,background=Colors.Background,command=lambda: el()).pack(fill=tkinter.X)
 app.geometry("800x600")
 app.resizable(False, False)
 menu.pack(side="left")
